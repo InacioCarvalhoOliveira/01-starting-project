@@ -10,7 +10,8 @@ on:
 
 jobs:
     build-and-test:
-        runs-on: ubuntu-latest
+        pool:
+            vmImage: self-hosted
         steps:
             - name: Checkout code
               uses: actions/checkout@v2
