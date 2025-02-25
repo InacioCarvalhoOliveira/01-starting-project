@@ -1,0 +1,30 @@
+trigger:
+- main
+  
+pool:
+  name: 'AZ-Pool'
+
+variables:
+  nodeVersion: '20.18.0'
+
+jobs:
+- job: build-and-test
+  steps:
+  - task: NodeTool@0
+    displayName: 'Setup Node.js'
+    inputs:
+      version: '$(nodeVersion)'
+
+  - task: Bash@3
+    displayName: 'Install dependencies'
+    inputs:
+      command: 'bash'
+    script: |
+      npm install
+
+  - task: Bash@3
+    displayName: 'Run tests'
+    inputs:
+      command: 'bash'
+    script: |
+      npm run test
