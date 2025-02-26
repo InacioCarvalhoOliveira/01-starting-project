@@ -7,7 +7,7 @@ trigger:
 - main
 
 pool:
-  vmImage: 'INACIO CARVALHO DE OLIVERA'
+  vmImage: 'AZ-Pool'
 
 steps:
 - task: NodeTool@0
