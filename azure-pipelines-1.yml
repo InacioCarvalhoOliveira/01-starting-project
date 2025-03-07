@@ -1,0 +1,39 @@
+name: azure tests pipeline AmusementPark
+
+#this set your specic branch
+trigger:
+- azure-pipelines
+
+#setting your self-hosted agent
+pool:
+  name: 'AZ-Pool'
+
+# stages -> stage ->steps(1-n)
+stages:
+- stage: 'Build'
+  displayName: 'build firs Job'
+  jobs:
+  - job: 'Build'
+    displayName: 'Build job'
+    pool:
+     name: 'AZ-Pool'
+    
+    variables:
+      nodeJsVersion: '20.x'
+
+    steps:
+    - checkout: self
+      displayName: 'promise checkout code'
+    - task: NodeTool@0
+      displayName: 'set up node.js'
+      inputs:
+        versionSpec: '$(nodeJsVersion)'
+    
+    - script: npm install 
+      displayName: 'Run install dep'
+    - script: npm test
+    - script: 'Run tests'
+           
+      
+
+      
