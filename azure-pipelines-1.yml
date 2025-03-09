@@ -4,10 +4,6 @@ name: azure tests pipeline AmusementPark
 trigger:
 - azure-pipelines
 
-#setting your self-hosted agent
-pool:
-  name: 'AZ-Pool'
-
 # stages -> stage ->steps(1-n)
 stages:
 - stage: 'Build'
@@ -16,7 +12,7 @@ stages:
   - job: 'Build'
     displayName: 'Build job'
     pool:
-     name: 'AZ-Pool'
+     vmImage: 'ubuntu-latest'
     
     variables:
       nodeJsVersion: '20.x'
@@ -30,10 +26,23 @@ stages:
         versionSpec: '$(nodeJsVersion)'
     
     - script: npm install 
-      displayName: 'Run install dep'
-    - script: npm test
-    - script: 'Run tests'
-           
+      displayName: 'Run install dependencies'
+         
+- stage: 'Test'
+  displayName: 'Test stage'
+  dependsOn: Build
+  condition: succeeded()
+  jobs:
+    - job: 'Test'
+      displayName: 'Testing provided test scope'
+      pool:
+        name: 'AZ-Pool'
+
+      steps:
+      - checkout: self        
+        displayName: 'Checkcout code for tests'
       
+      - script: npm test
+        displayName: 'Run tests'
 
       
