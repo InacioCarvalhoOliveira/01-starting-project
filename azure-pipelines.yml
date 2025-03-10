@@ -32,6 +32,7 @@ stages:
     
     - script: npm install 
       displayName: 'Run install dependencies'
+      workingDirectory: $(workingDirectory)
          
 - stage: 'Test'
   displayName: 'Test stage'
@@ -46,9 +47,10 @@ stages:
       steps:
       - checkout: self        
         displayName: 'Checkcout code for tests'
-      
+             
       - script: npm test
         displayName: 'Run tests'
+        workingDirectory: $(workingDirectory)
 
       
 
