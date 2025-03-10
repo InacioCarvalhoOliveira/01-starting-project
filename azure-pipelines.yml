@@ -21,6 +21,7 @@ stages:
     
     variables:
       nodeJsVersion: '20.x'
+      workdir : 'd:/GitHub/Angular/01-starting-project'
 
     steps:
     - checkout: self
@@ -32,7 +33,7 @@ stages:
     
     - script: npm install 
       displayName: 'Run install dependencies'
-      workingDirectory: $(workingDirectory)
+      workingDirectory: $(workDir)
          
 - stage: 'Test'
   displayName: 'Test stage'
@@ -50,8 +51,8 @@ stages:
              
       - script: npm test
         displayName: 'Run tests'
-        workingDirectory: $(workingDirectory)
-
+        workingDirectory: $(workDir)
+        
       
 
 # name: azure tests pipeline AmusementPark old
