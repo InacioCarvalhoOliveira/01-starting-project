@@ -32,8 +32,7 @@ stages:
         versionSpec: '$(nodeJsVersion)'
     
     - script: npm install 
-      displayName: 'Run install dependencies'
-      workingDirectory: $(workDir)
+      displayName: 'Run install dependencies'      
          
 - stage: 'Test'
   displayName: 'Test stage'
