@@ -1,4 +1,7 @@
 # Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
 
 name: azure tests pipeline AmusementPark
 
@@ -36,21 +39,17 @@ stages:
   condition: succeeded()
   jobs:
     - job: 'Test'
-      steps:
-      - checkout: self
-      - script: |
-          # Check if Angular CLI (ng) is installed
-          if ! command -v ng &> /dev/null
-          then
-            echo "Angular CLI not found, installing..."
-            npm install -g @angular/cli
-          else
-            echo "Angular CLI is already installed"
-          fi
+      displayName: 'Testing provided test scope'
+      pool:
+        name: 'AZ-Pool'
 
-          # Run tests
-          npm test
-        displayName: 'Check and Install Angular CLI if Needed, Run tests'
+      steps:
+      - checkout: self        
+        displayName: 'Checkcout code for tests'
+             
+      - script: npm test
+        displayName: 'Run tests'
+   
         
       
 
