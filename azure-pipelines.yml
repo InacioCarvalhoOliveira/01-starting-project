@@ -1,71 +1,50 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 name: azure tests pipeline AmusementPark
 
-#this set your specic branch
 trigger:
 - azure-pipelines
 
-# stages -> stage ->steps(1-n)
+pool: 
+  name: 'AZ-Pool' # Using your hosted agent
+
+variables:
+  nodeJsVersion: '18.x' # Recommended Node.js version for Angular
+
 stages:
 - stage: 'Build'
-  displayName: 'build firs Job'
+  displayName: 'Build Stage'
   jobs:
   - job: 'Build'
-    displayName: 'Build job'
-    pool:
-     name: 'AZ-Pool'
-    
-    variables:
-      nodeJsVersion: '20.x'
+    displayName: 'Build Job'
     
     steps:
     - checkout: self
-      displayName: 'promise checkout code'
+      displayName: 'Checkout Code'
+
     - task: NodeTool@0
-      displayName: 'set up node.js'
+      displayName: 'Set Up Node.js'
       inputs:
         versionSpec: '$(nodeJsVersion)'
-    
-    - script: npm install 
-      displayName: 'Run install dependencies'      
-         
+
+    - script: npm install
+      displayName: 'Install Dependencies'
+
+    - script: npm install -g @angular/cli@19.2.0
+      displayName: 'Install Angular CLI'
+
+    - script: npm run build --prod
+      displayName: 'Build Angular Application'
+
 - stage: 'Test'
-  displayName: 'Test stage'
+  displayName: 'Test Stage'
   dependsOn: Build
   condition: succeeded()
   jobs:
-    - job: 'Test'
-      displayName: 'Testing provided test scope'
-      pool:
-        name: 'AZ-Pool'
-
-      steps:
-      - checkout: self        
-        displayName: 'Checkcout code for tests'
-             
-      - script: npm test
-        displayName: 'Run tests'
-   
-        
-      
-
-# name: azure tests pipeline AmusementPark old
-# trigger:
-# - main
-
-# pool:
-#   name: 'AZ-Pool'
-
-# steps:
-# - task: NodeTool@0
-#   displayName: 'Setup Node.js'
-#   inputs:
-#     versionSpec: '20.x'
+  - job: 'Test'
+    displayName: 'Test Job'
     
-# - script: npm install
-#   displayName: 'Run tests'
-  
+    steps:
+    - checkout: self
+      displayName: 'Checkout Code for Tests'
+
+    - script: ng test --watch=false
+      displayName: 'Run Angular Tests'
